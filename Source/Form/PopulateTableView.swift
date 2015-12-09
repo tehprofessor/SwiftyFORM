@@ -1,5 +1,14 @@
-// MIT license. Copyright (c) 2014 SwiftyFORM. All rights reserved.
+//
+//  Builder.swift
+//  SwiftyFORM
+//
+//  Created by Simon Strandgaard on 03/11/14.
+//  Copyright (c) 2014 Simon Strandgaard. All rights reserved.
+//
+
 import UIKit
+
+
 
 protocol WillPopCommandProtocol {
 	func execute(context: ViewControllerFormItemPopContext)
@@ -64,27 +73,13 @@ class PopulateTableView: FormItemVisitor {
 		cells = [UITableViewCell]()
 		self.headerBlock = nil
 	}
-	
+
+  func visitCustom(object: CustomFormItem) {}
 	
 	func visitMeta(object: MetaFormItem) {
 		// this item is not visual
 	}
 
-	func visitCustom(object: CustomFormItem) {
-		do {
-			let cell = try object.createCell()
-			cells.append(cell)
-		} catch {
-			print("ERROR: Could not create cell for custom form item: \(error)")
-
-			var model = StaticTextCellModel()
-			model.title = "CustomFormItem"
-			model.value = "Exception"
-			let cell = StaticTextCell(model: model)
-			cells.append(cell)
-		}
-	}
-	
 	func visitStaticText(object: StaticTextFormItem) {
 		var model = StaticTextCellModel()
 		model.title = object.title
@@ -108,7 +103,7 @@ class PopulateTableView: FormItemVisitor {
 		weak var weakObject = object
 		model.valueDidChange = { (value: String) in
 			DLog("value \(value)")
-			weakObject?.textDidChange(value)
+			weakObject?.innerValue = value
 			return
 		}
 		let cell = TextFieldFormItemCell(model: model)
@@ -266,7 +261,11 @@ class PopulateTableView: FormItemVisitor {
 	func visitButton(object: ButtonFormItem) {
 		var model = ButtonCellModel()
 		model.title = object.title
+    model.subtitle = object.subtitle
 		model.action = object.action
+    model.textAlignment = object.textAlignment
+    model.detailAlignment = object.detailAlignment
+    model.styleBlock = object.styleBlock
 		let cell = ButtonCell(model: model)
 		cells.append(cell)
 	}
@@ -291,7 +290,7 @@ class PopulateTableView: FormItemVisitor {
 		weak var weakObject = object
 		model.valueDidChange = { (value: Bool) in
 			DLog("value did change \(value)")
-			weakObject?.switchDidChange(value)
+			weakObject?.innerValue = value
 			return
 		}
 
@@ -347,7 +346,7 @@ class PopulateTableView: FormItemVisitor {
 		weak var weakObject = object
 		model.valueDidChange = { (value: Float) in
 			DLog("value did change \(value)")
-			weakObject?.sliderDidChange(value)
+			weakObject?.innerValue = value
 			return
 		}
 

@@ -1,4 +1,11 @@
-// MIT license. Copyright (c) 2014 SwiftyFORM. All rights reserved.
+//
+//  FormBuilder.swift
+//  SwiftyFORM
+//
+//  Created by Simon Strandgaard on 23/11/14.
+//  Copyright (c) 2014 Simon Strandgaard. All rights reserved.
+//
+
 import UIKit
 
 class AlignLeft {
@@ -26,10 +33,6 @@ public class FormBuilder: NSObject {
 	
 	public var toolbarMode: ToolbarMode = .None
 	
-	public func removeAll() {
-		innerItems.removeAll()
-	}
-	
 	public func append(item: FormItem) -> FormItem {
 		innerItems.append(item)
 		return item
@@ -38,6 +41,10 @@ public class FormBuilder: NSObject {
 	public func appendMulti(items: [FormItem]) {
 		innerItems += items
 	}
+
+  public func reset() {
+    innerItems = [FormItem]()
+  }
 	
 	public func alignLeft(items: [FormItem]) {
 		let alignLeftItem = AlignLeft(items: items)
@@ -50,14 +57,14 @@ public class FormBuilder: NSObject {
 	}
 	
 	public var items: [FormItem] {
-		return innerItems
+		get { return innerItems }
 	}
 	
 	public func dump(prettyPrinted: Bool = true) -> NSData {
 		return DumpVisitor.dump(prettyPrinted, items: innerItems)
 	}
 	
-	func result(viewController: UIViewController) -> TableViewSectionArray {
+	public func result(viewController: UIViewController) -> TableViewSectionArray {
 		let model = PopulateTableViewModel(viewController: viewController, toolbarMode: toolbarMode)
 		
 		let v = PopulateTableView(model: model)

@@ -176,8 +176,15 @@ public class TextFieldFormItemCell: UITableViewCell, UITextFieldDelegate, CellHe
 		var textFieldFrame = CGRectZero
 		var errorLabelFrame = CGRectZero
 		var cellHeight: CGFloat = 0
+    var area: CGRect = CGRectZero
+
 		let veryTallCell = CGRectMake(0, 0, cellWidth, CGFloat.max)
-		let area = veryTallCell.insetBy(dx: 16, dy: 0)
+    switch UIDevice.currentDevice().userInterfaceIdiom {
+    case .Pad:
+      area = veryTallCell.insetBy(dx: 48, dy: 0)
+    default:
+      area = veryTallCell.insetBy(dx: 16, dy: 0)
+    }
 		
 		let (topRect, _) = area.divide(44, fromEdge: .MinYEdge)
 		if true {

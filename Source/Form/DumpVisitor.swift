@@ -1,4 +1,11 @@
-// MIT license. Copyright (c) 2014 SwiftyFORM. All rights reserved.
+//
+//  DumpVisitor.swift
+//  SwiftyFORM
+//
+//  Created by Simon Strandgaard on 23/11/14.
+//  Copyright (c) 2014 Simon Strandgaard. All rights reserved.
+//
+
 import Foundation
 
 public class DumpVisitor: FormItemVisitor {
@@ -46,6 +53,8 @@ public class DumpVisitor: FormItemVisitor {
 	}
 	
 	private var dict = Dictionary<String, AnyObject>()
+
+  public func visitCustom(object: CustomFormItem) {}
 	
 	public func visitMeta(object: MetaFormItem) {
 		dict["class"] = "MetaFormItem"
@@ -55,13 +64,6 @@ public class DumpVisitor: FormItemVisitor {
 		dict["value"] = object.value
 	}
 
-	public func visitCustom(object: CustomFormItem) {
-		dict["class"] = "CustomFormItem"
-		dict["elementIdentifier"] = object.elementIdentifier
-		dict["styleIdentifier"] = object.styleIdentifier
-		dict["styleClass"] = object.styleClass
-	}
-	
 	public func visitStaticText(object: StaticTextFormItem) {
 		dict["class"] = "StaticTextFormItem"
 		dict["elementIdentifier"] = object.elementIdentifier
@@ -133,6 +135,7 @@ public class DumpVisitor: FormItemVisitor {
 		dict["styleIdentifier"] = object.styleIdentifier
 		dict["styleClass"] = object.styleClass
 		dict["title"] = object.title
+    dict["subtitle"] = object.subtitle
 	}
 	
 	public func visitOptionRow(object: OptionRowFormItem) {
